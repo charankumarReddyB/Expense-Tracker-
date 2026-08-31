@@ -1,0 +1,91 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  icon      String?
+  color     String?
+  keywords  String?
+  isCustom  Boolean  @default(false)
+  userId    String?
+  expenses  Expense[]
+  budgets   Budget[]
+  recurring RecurringExpense[]
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Float
+  description String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Budget {
+  id         String   @id @default(uuid())
+  userId     String
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  amount     Float
+  period     String   @default("monthly")
+  startDate  DateTime
+  endDate    DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Goal {
+  id            String   @id @default(uuid())
+  userId        String
+  title         String
+  targetAmount  Float
+  currentAmount Float    @default(0)
+  deadline      DateTime?
+  category      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model RecurringExpense {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Float
+  description String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  frequency   String
+  nextDueDate DateTime
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Anomaly {
+  id          String   @id @default(uuid())
+  userId      String
+  expenseId   String?
+  description String
+  severity    String
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}

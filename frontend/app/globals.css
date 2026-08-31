@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: #BFF549;
+    --primary-dark: #A5D93E;
+    --dark-bg: #0A0B0D;
+    --dark-card: #13151A;
+    --dark-elevated: #1A1D24;
+  }
+
+  * {
+    @apply border-dark-border;
+  }
+
+  body {
+    @apply bg-dark-bg text-gray-100;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl;
+  }
+
+  .glass-button {
+    @apply bg-gradient-to-r from-primary/90 to-primary-dark/90 hover:from-primary hover:to-primary-dark text-dark-bg font-semibold px-6 py-3 rounded-xl transition-all duration-300 shadow-glow hover:shadow-glow-lg transform hover:scale-105;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-accent-blue to-accent-purple bg-clip-text text-transparent;
+  }
+
+  .stat-card {
+    @apply glass-card p-6 hover:scale-105 transition-transform duration-300 cursor-pointer;
+  }
+
+  .input-glass {
+    @apply bg-dark-elevated/50 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 outline-none;
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-elevated rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary/30;
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary/30 text-white;
+}
