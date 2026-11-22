@@ -6,20 +6,22 @@ export async function GET() {
     const recurring = await prisma.recurringExpense.findMany({
       where: { active: true },
       include: { category: true },
+      orderBy: { nextDueDate: 'asc' },
     })
 
     const bills = recurring.map((r) => {
       const dueDate = new Date(r.nextDueDate)
       const diffDays = Math.ceil((dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
       return {
+        recurring_id: r.id,
         bill_id: r.id,
         name: r.description,
         amount: r.amount,
-        due_date: dueDate.toISOString().split('T')[0],
-        days_until_due: diffDays,
-        category: r.category?.name || 'General',
-        frequency: r.frequency,
-        is_paid: false,
+        currency: 'INR',
+        next_due_date: dueDate.toISOString().split('T')[0],
+        days_until_due: Math.max(0, diffDays),
+        category_name: r.category?.name || 'Subscription',
+        category_icon: r.category?.icon || '📅',
       }
     })
 

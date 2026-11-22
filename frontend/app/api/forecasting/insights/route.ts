@@ -4,20 +4,28 @@ export async function GET() {
   return NextResponse.json({
     insights: [
       {
-        type: 'seasonal_spike',
-        category: 'Shopping',
-        title: 'Anticipated Festive Spending',
-        description: 'Historical records show November and December spending rises by ~15% due to holidays.',
-        action: 'Allocate ₹15,000 to seasonal buffer in November.',
+        type: 'warning',
         priority: 'high',
+        title: 'Holiday Spending Surge',
+        category: 'Shopping',
+        description: 'Historical records project a 15% increase in November & December shopping expenses.',
+        action: 'Set a holiday shopping buffer of ₹15,000.',
       },
       {
-        type: 'budget_trend',
-        category: 'Food & Dining',
-        title: 'Steady Dining Out Stabilization',
-        description: 'Dining out expenditures have leveled off across the last 60 days.',
-        action: 'Maintain current weekly meal prep schedule.',
+        type: 'success',
         priority: 'medium',
+        title: 'Dining Out Stabilizing',
+        category: 'Food & Dining',
+        description: 'Dining out expenditures have leveled off across the last 60 days.',
+        action: 'Maintain current weekly home meal prep routine.',
+      },
+      {
+        type: 'info',
+        priority: 'low',
+        title: 'Utility Bill Consistency',
+        category: 'Utilities',
+        description: 'Electricity and internet charges have stayed within 3% of baseline.',
+        action: 'No budget adjustment necessary for upcoming cycle.',
       },
     ],
   })

@@ -89,9 +89,19 @@ export default function RecurringExpensesPage() {
         api.get('/api/recurring/upcoming/bills?days_ahead=30'),
         api.get('/api/categories/')
       ])
-      setRecurring(recurringRes.data || [])
-      setUpcomingBills(billsRes.data || [])
-      setCategories(categoriesRes.data || [])
+      const recurringData = Array.isArray(recurringRes.data)
+        ? recurringRes.data
+        : recurringRes.data?.items || recurringRes.data?.recurring || []
+      const billsData = Array.isArray(billsRes.data)
+        ? billsRes.data
+        : billsRes.data?.bills || []
+      const categoriesData = Array.isArray(categoriesRes.data)
+        ? categoriesRes.data
+        : categoriesRes.data?.categories || []
+
+      setRecurring(recurringData)
+      setUpcomingBills(billsData)
+      setCategories(categoriesData)
     } catch (error) {
       console.error('Failed to fetch recurring expenses:', error)
     } finally {
@@ -274,10 +284,10 @@ export default function RecurringExpensesPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="text-2xl">{item.category.icon}</span>
+                          <span className="text-2xl">{item.category?.icon || '📅'}</span>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold">{item.name}</h3>
+                              <h3 className="font-semibold">{item.name || item.description}</h3>
                               {item.is_auto_detected && (
                                 <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 text-xs rounded-full flex items-center gap-1">
                                   <Sparkles className="w-3 h-3" />
@@ -291,15 +301,15 @@ export default function RecurringExpensesPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-4 text-sm">
-                          <span className={`px-3 py-1 rounded-full font-medium ${getFrequencyBadge(item.frequency)}`}>
-                            {item.frequency.charAt(0).toUpperCase() + item.frequency.slice(1)}
+                          <span className={`px-3 py-1 rounded-full font-medium ${getFrequencyBadge(item.frequency || 'monthly')}`}>
+                            {(item.frequency || 'monthly').charAt(0).toUpperCase() + (item.frequency || 'monthly').slice(1)}
                           </span>
                           <span className="text-gray-400">
                             Next: {formatDate(item.next_due_date)}
                           </span>
                           {item.is_auto_detected && (
                             <span className="text-gray-400">
-                              {item.detection_confidence.toFixed(0)}% confidence
+                              {(item.detection_confidence ?? 90).toFixed(0)}% confidence
                             </span>
                           )}
                         </div>
@@ -307,10 +317,10 @@ export default function RecurringExpensesPage() {
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <div className="text-xl font-semibold">
-                            {formatCurrency(item.amount, item.currency)}
+                            {formatCurrency(item.amount, item.currency || 'INR')}
                           </div>
                           <div className="text-sm text-gray-400">
-                            {item.category.name}
+                            {item.category?.name || 'Subscription'}
                           </div>
                         </div>
                         <div className="flex gap-2">
