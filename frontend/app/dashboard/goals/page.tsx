@@ -67,7 +67,7 @@ export default function GoalsPage() {
         api.get('/api/goals/summary')
       ])
       
-      setGoals(goalsRes.data)
+      setGoals(Array.isArray(goalsRes.data) ? goalsRes.data : (goalsRes.data?.goals || []))
       setSummary(summaryRes.data)
     } catch (error) {
       console.error('Failed to fetch goals:', error)
@@ -385,19 +385,19 @@ export default function GoalsPage() {
                       {formatCurrency(goal.current_amount)} of {formatCurrency(goal.target_amount)}
                     </span>
                     <span className="font-semibold text-primary">
-                      {goal.progress_percentage.toFixed(1)}%
+                      {(goal.progress_percentage ?? 0).toFixed(1)}%
                     </span>
                   </div>
                   <div className="h-3 bg-dark-elevated rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all duration-500 ${
-                        goal.progress_percentage >= 100
+                        (goal.progress_percentage ?? 0) >= 100
                           ? 'bg-gradient-to-r from-green-500 to-green-600'
-                          : goal.progress_percentage >= 75
+                          : (goal.progress_percentage ?? 0) >= 75
                           ? 'bg-gradient-to-r from-primary to-primary-dark'
                           : 'bg-gradient-to-r from-blue-500 to-blue-600'
                       }`}
-                      style={{ width: `${Math.min(goal.progress_percentage, 100)}%` }}
+                      style={{ width: `${Math.min(goal.progress_percentage ?? 0, 100)}%` }}
                     ></div>
                   </div>
                 </div>

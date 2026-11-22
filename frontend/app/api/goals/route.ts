@@ -7,15 +7,38 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     })
 
-    const formatted = goals.map((g) => ({
-      goal_id: g.id,
-      name: g.title,
-      target_amount: g.targetAmount,
-      current_amount: g.currentAmount,
-      deadline: g.deadline ? g.deadline.toISOString().split('T')[0] : '',
-      priority: g.targetAmount > 150000 ? 'high' : g.targetAmount > 100000 ? 'medium' : 'low',
-      category: g.category || 'Savings',
-    }))
+    const formatted = goals.map((g) => {
+      const progress = g.targetAmount > 0 ? (g.currentAmount / g.targetAmount) * 100 : 0
+      const days_remaining = g.deadline
+        ? Math.max(0, Math.ceil((new Date(g.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+        : 30
+      const status = (g.currentAmount >= g.targetAmount ? 'completed' : 'active') as
+        | 'active'
+        | 'paused'
+        | 'completed'
+        | 'abandoned'
+
+      return {
+        goal_id: g.id,
+        id: g.id,
+        name: g.title,
+        title: g.title,
+        description: g.category ? `Goal for ${g.category}` : 'Personal Savings Goal',
+        target_amount: g.targetAmount,
+        current_amount: g.currentAmount,
+        target_date: g.deadline ? g.deadline.toISOString().split('T')[0] : null,
+        deadline: g.deadline ? g.deadline.toISOString().split('T')[0] : '',
+        status,
+        priority: 2,
+        milestones: [],
+        progress_percentage: Math.round(progress * 10) / 10,
+        days_remaining,
+        projected_completion_date: g.deadline ? g.deadline.toISOString().split('T')[0] : null,
+        is_on_track: progress >= 25,
+        category: g.category || 'Savings',
+        created_at: g.createdAt.toISOString(),
+      }
+    })
 
     return NextResponse.json({ goals: formatted })
   } catch (error) {
