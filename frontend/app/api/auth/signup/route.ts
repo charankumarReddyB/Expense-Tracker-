@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 const JWT_SECRET = process.env.JWT_SECRET_KEY || 'dev-secret-key-change-in-production'
 
 export async function POST(request: Request) {

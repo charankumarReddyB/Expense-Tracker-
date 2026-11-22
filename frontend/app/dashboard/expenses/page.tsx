@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import api from '@/lib/api'
 import { formatCurrency, formatDate } from '@/lib/utils'
 import {
@@ -36,7 +36,7 @@ interface Category {
   color: string
 }
 
-export default function ExpensesPage() {
+function ExpensesContent() {
   const searchParams = useSearchParams()
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -344,5 +344,13 @@ export default function ExpensesPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function ExpensesPage() {
+  return (
+    <Suspense fallback={<div className="p-6 text-center text-gray-400">Loading expenses...</div>}>
+      <ExpensesContent />
+    </Suspense>
   )
 }

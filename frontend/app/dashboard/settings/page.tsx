@@ -45,7 +45,7 @@ export default function SettingsPage() {
         currency: user.profile?.currency || 'INR',
         timezone: user.profile?.timezone || 'Asia/Kolkata',
         date_format: user.profile?.preferences?.date_format || 'DD/MM/YYYY',
-        items_per_page: user.profile?.preferences?.items_per_page || '20'
+        items_per_page: (user.profile?.preferences?.items_per_page || '20').toString()
       })
       setNotifications(user.profile?.notifications || notifications)
     }
@@ -266,7 +266,7 @@ export default function SettingsPage() {
               <input 
                 type="password" 
                 value={passwordForm.new_password}
-                onChange={(e) => setPasswordForm({ ...profileForm, new_password: e.target.value })}
+                onChange={(e) => setPasswordForm({ ...passwordForm, new_password: e.target.value })}
                 className="w-full px-4 py-2 bg-dark-elevated border border-gray-700 rounded-lg focus:border-primary focus:outline-none"
                 minLength={8}
                 required

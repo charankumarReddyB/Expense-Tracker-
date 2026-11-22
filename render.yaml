@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: expense-tracker
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build:frontend
+    startCommand: npm run start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: NODE_VERSION
+        value: 20.x

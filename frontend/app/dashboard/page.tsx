@@ -23,6 +23,7 @@ interface Stats {
   total_amount: number
   expense_count: number
   average_expense: number
+  month_comparison: number
   category_breakdown: Record<string, number>
   period: {
     month: number | null

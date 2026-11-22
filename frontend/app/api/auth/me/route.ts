@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import jwt from 'jsonwebtoken'
+
+export const dynamic = 'force-dynamic'
 const JWT_SECRET = process.env.JWT_SECRET_KEY || 'dev-secret-key-change-in-production'
 
 export async function GET(request: Request) {
